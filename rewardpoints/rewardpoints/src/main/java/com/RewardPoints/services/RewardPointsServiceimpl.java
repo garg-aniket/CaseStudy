@@ -29,7 +29,7 @@ public class RewardPointsServiceimpl implements RewardPointsServices {
 	public RewardPoints updateRewardPointsById(Integer id, Integer points) {
 		
 		// Retrieve the existing reward points entry by its ID.
-		RewardPoints rp=csd.findById(id).get();
+		RewardPoints rp=csd.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "Id" ,id));
 		
 		// Update the reward points value with the provided points.
 		rp.setRewardPoints(points);
