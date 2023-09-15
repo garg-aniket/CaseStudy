@@ -1,5 +1,6 @@
 package com.deals;
 
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -28,7 +30,7 @@ public class CouponControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
+    @MockBean
     private CouponService couponService;
 
 
@@ -77,7 +79,6 @@ public class CouponControllerTest {
         String existingCouponJson = objectMapper.writeValueAsString(existingCoupon);
 
         // Mock behavior of couponService methods
-        doReturn(existingCoupon).when(couponService).getCouponByCode(anyString());
         doReturn(true).when(couponService).updateCoupon(eq(couponCode), any(Coupon.class));
 
         Coupon updatedCoupon = new Coupon();
@@ -106,8 +107,8 @@ public class CouponControllerTest {
         String existingCouponJson = objectMapper.writeValueAsString(existingCoupon);
 
         // Mock behavior of couponService methods
-        doReturn(existingCoupon).when(couponService).getCouponByCode(anyString());
-        doReturn(true).when(couponService).deleteCoupon(anyString());
+        doReturn(existingCoupon).when(couponService).getCouponByCode(couponCode);
+        doReturn(true).when(couponService).deleteCoupon(couponCode);
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/admin/coupon/delete/{couponCode}", couponCode)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -140,7 +141,7 @@ public class CouponControllerTest {
         String existingCouponJson = objectMapper.writeValueAsString(existingCoupon);
 
         // Mock behavior of couponService methods
-        doReturn(existingCoupon).when(couponService).getCouponByCode(anyString());
+        doReturn(existingCoupon).when(couponService).getCouponByCode(couponCode);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/admin/coupon/search/{couponCode}", couponCode))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -157,7 +158,7 @@ public class CouponControllerTest {
         String couponsJson = objectMapper.writeValueAsString(coupons);
 
         // Mock behavior of couponService methods
-        doReturn(coupons).when(couponService).getCouponsByMerchant(anyString());
+        doReturn(coupons).when(couponService).getCouponsByMerchant(merchantName);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/admin/coupon/search/merchant/{merchantName}", merchantName))
                 .andExpect(MockMvcResultMatchers.status().isOk())
