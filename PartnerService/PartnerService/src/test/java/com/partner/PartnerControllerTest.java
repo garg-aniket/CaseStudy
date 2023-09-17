@@ -7,11 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -20,17 +18,20 @@ import com.partner.services.PartnerService;
 import com.partner.controller.PartnerController;
 
 import jakarta.validation.Validator;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @WebMvcTest(PartnerController.class)
 @AutoConfigureMockMvc
 public class PartnerControllerTest {
 
+    @Autowired
     private MockMvc mockMvc;
 
     @InjectMocks
@@ -40,12 +41,12 @@ public class PartnerControllerTest {
     private PartnerService partnerService;
 
     @Autowired
-    private Validator validator; 
+    private Validator validator;
 
     @Before
     public void setup() {
-    	// Initialize Mockito annotations and configure the MockMvc instance
-    	 MockitoAnnotations.openMocks(this);
+        // Initialize Mockito annotations and configure the MockMvc instance
+    	MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(partnerController).build();
     }
 
@@ -70,8 +71,8 @@ public class PartnerControllerTest {
     public void testGetAllPartner() throws Exception {
         // Create a list of sample partners
         List<Partner> partners = new ArrayList<>();
-        partners.add(new Partner(1, "Partner 1","Good Partner","https://www.example.com/image.jpg"));
-        partners.add(new Partner(2, "Partner 2","Good Partner2","https://www.example2.com/image.jpg"));
+        partners.add(new Partner(1, "Partner 1", "Good Partner", "https://www.example.com/image.jpg"));
+        partners.add(new Partner(2, "Partner 2", "Good Partner2", "https://www.example2.com/image.jpg"));
 
         // Mock the service method
         when(partnerService.getAllPartner()).thenReturn(partners);
@@ -116,7 +117,7 @@ public class PartnerControllerTest {
     @Test
     public void testGetPartnerById() throws Exception {
         // Create a sample Partner object
-        Partner partner = new Partner(1, "Partner 1","Good Partner","https://www.example.com/image.jpg");
+        Partner partner = new Partner(1, "Partner 1", "Good Partner", "https://www.example.com/image.jpg");
 
         // Mock the service method
         when(partnerService.getPartnerById(anyInt())).thenReturn(partner);
@@ -124,6 +125,6 @@ public class PartnerControllerTest {
         // Perform a GET request to retrieve a partner by ID
         mockMvc.perform(get("/api/partner/getPartnerById/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.partnerName", is("Test Partner")));
+                .andExpect(jsonPath("$.partnerName", is("Partner 1")));
     }
 }

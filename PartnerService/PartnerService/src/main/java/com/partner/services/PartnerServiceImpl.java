@@ -1,5 +1,4 @@
 package com.partner.services;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,7 @@ import com.partner.model.Partner;
 import com.partner.repository.PartnerRepository;
 
 @Service
-public class PartnerSeviceImpl implements PartnerService {
+public class PartnerServiceImpl implements PartnerService {
         
 	@Autowired
 	PartnerRepository partnerRepository;
